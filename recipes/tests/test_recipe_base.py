@@ -4,10 +4,10 @@ from recipes.models import Category, Recipe, User
 
 
 class RecipeTestBase(TestCase):
-    # Setup and Teardown
+    # Setup for tests.
     def setUp(self) -> None:
         """
-        Cria um model de categoria genérico (fixture) para ser utilizado durante os testes.
+        Create a generic category model for tests.
         """
         return super().setUp()
 
@@ -47,16 +47,16 @@ class RecipeTestBase(TestCase):
         is_published=True,
     ):
 
-        # Checa se há dados para categorias, se não, cria um dicionário vazio
+        # Creates an empty dictionary if there is no data in the category model.
         if category_data is None:
             category_data = {}
 
-        # Checa se há dados para autor, se não, cria um dicionário vazio 
+        # Creates an empty dictionary if there is no author data. 
         if author_data is None:
             author_data = {}
 
         return Recipe.objects.create(
-            category=self.make_category(**category_data),
+            category=self.make_category(**category_data),  # Unpack the dictionary 
             author=self.make_author(**author_data),  
             title=title,
             description=description,
