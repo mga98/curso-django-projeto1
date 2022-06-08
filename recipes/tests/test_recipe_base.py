@@ -56,7 +56,7 @@ class RecipeTestBase(TestCase):
             author_data = {}
 
         return Recipe.objects.create(
-            category=self.make_category(**category_data),  # Unpack the dictionary 
+            category=self.make_category(**category_data),  # Unpack the dictionary.
             author=self.make_author(**author_data),  
             title=title,
             description=description,
