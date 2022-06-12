@@ -12,7 +12,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     title = models.CharField('Título', max_length=65)
     description = models.CharField('Descrição', max_length=165)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     preparation_time = models.IntegerField('Tempo de preparo')
     preparation_time_unit = models.CharField('Tempo de preparo de unidade', max_length=65)
     servings = models.IntegerField('Porções')

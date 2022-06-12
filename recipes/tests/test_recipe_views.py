@@ -42,7 +42,6 @@ class RecipeViewsTest(RecipeTestBase):
 
         self.assertEqual(len(response_context_recipes), 0)
 
-
     # Detail pages tests
     def test_recipe_detail_view_function_is_correct(self):
         view = resolve(reverse('recipes:recipe', kwargs={'id': 1}))
@@ -74,7 +73,7 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertIs(view.func, views.category)
 
     def test_recipe_category_view_returns_404_if_no_recipes_found(self):
-        response = self.client.get('recipes:category', kwargs={'category_id': 1})
+        response = self.client.get(reverse('recipes:category', kwargs={'category_id': 1}))
         self.assertEqual(response.status_code, 404)
 
     def test_recipe_category_template_loads_recipes(self):
@@ -94,3 +93,18 @@ class RecipeViewsTest(RecipeTestBase):
         response = self.client.get(reverse('recipes:category', kwargs={'category_id': recipe.category.id}))
 
         self.assertEqual(response.status_code, 404)
+
+    # Search field tests
+    def test_search_view_function_is_correct(self):
+        view = resolve(reverse('recipes:search'))
+        self.assertIs(view.func, views.search)
+
+    def test_recipe_search_view_loads_correct_template(self):
+        response = self.client.get(reverse('recipes:search') + '?q=Teste')
+        self.assertTemplateUsed(response, 'recipes/pages/search.html')
+
+    def test_recipe_search_view_raises_404_if_no_correct_term(self):
+        url = reverse('recipes:search')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+    
