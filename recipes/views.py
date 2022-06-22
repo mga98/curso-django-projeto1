@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.db.models import Q
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 from .models import Category, Recipe
@@ -42,8 +43,12 @@ def search(request):
         raise Http404()
 
     recipes = Recipe.objects.filter(
-        title__icontains=search_term,
-    )
+        Q(
+            Q(title__icontains=search_term) |  # The pipe | is used to put an "OR" between the filters instead of the "AND"  
+            Q(description__icontains=search_term)
+        ),
+        is_published=True,
+    ).order_by('-id')
 
     return render(request, 'recipes/pages/search.html', context={
         'page_title': f'Search for "{search_term}"',
