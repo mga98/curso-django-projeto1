@@ -44,7 +44,7 @@ def search(request):
 
     recipes = Recipe.objects.filter(
         Q(
-            Q(title__icontains=search_term) |  # The pipe | is used to put an "OR" between the filters instead of the "AND"  
+            Q(title__icontains=search_term) |  # The pipe | is used to put an "OR" between the filters instead of the "AND".
             Q(description__icontains=search_term)
         ),
         is_published=True,
