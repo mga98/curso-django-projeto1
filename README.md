@@ -1,0 +1,1 @@
+Projeto de estudo de django e django rest framework para o curso da udemy.
