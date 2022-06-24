@@ -1,0 +1,15 @@
+import math
+
+
+def make_pagination_range(page_range, page_qty, current_page):
+    middle_range = math.ceil(page_qty / 2)  # math.ceil round the division up
+    start_range = current_page - middle_range
+    stop_range = current_page + middle_range
+
+    start_range_offset = abs(start_range) if start_range < 0 else 0  # Converts a negative number in a positive one
+
+    if start_range < 0:
+        start_range = 0
+        stop_range += start_range_offset
+
+    return page_range[start_range:stop_range]
