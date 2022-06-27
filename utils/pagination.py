@@ -7,8 +7,11 @@ def make_pagination_range(page_range, page_qty, current_page):
     stop_range = current_page + middle_range
     total_pages = len(page_range)
 
+    # Used if start range page is negative
     start_range_offset = abs(start_range) if start_range < 0 else 0  # Converts a negative number in a positive one
 
+    # If the start range is less than 0 it is changed to 0 and 
+    # the stop range sum with the start_range_offset.
     if start_range < 0:
         start_range = 0
         stop_range += start_range_offset
