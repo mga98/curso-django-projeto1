@@ -2,6 +2,8 @@ from django.urls import reverse, resolve
 
 from recipes import views
 from .test_recipe_base import RecipeTestBase
+from unittest.mock import patch
+
 
 class RecipeHomeViewTest(RecipeTestBase):
     def test_recipe_home_view_function_is_correct(self):
@@ -40,3 +42,18 @@ class RecipeHomeViewTest(RecipeTestBase):
         response_context_recipes = response.context['recipes']
 
         self.assertEqual(len(response_context_recipes), 0)
+
+    def test_recipe_home_template_is_paginated(self):
+        for i in range(8):
+            kwargs = {'author_data':{'username': f'username{i}'}, 'slug': f'slug{i}'}
+            self.make_recipe(**kwargs)
+
+        with patch('recipes.views.PER_PAGE', new=3):
+            response = self.client.get(reverse('recipes:index'))
+            recipes = response.context['recipes']
+            paginator = recipes.paginator
+
+        self.assertEqual(paginator.num_pages, 3)
+        self.assertEqual(len(paginator.get_page(1)), 3)
+        self.assertEqual(len(paginator.get_page(2)), 3)
+        self.assertEqual(len(paginator.get_page(3)), 2)

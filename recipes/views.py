@@ -10,7 +10,7 @@ from utils.pagination import make_pagination
 import os
 
 
-PER_PAGE = os.environ.get('PER_PAGE', 6)
+PER_PAGE = int(os.environ.get('PER_PAGE', 6))  # Used to set a maximum number of recipes in each page.
 
 
 def home(request):
