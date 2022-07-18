@@ -1,6 +1,7 @@
 from attr import attr, fields
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 def add_attr(field, attr_name, attr_new_val):
@@ -21,7 +22,9 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['first_name'], 'Digite seu primeiro nome')
         add_placeholder(self.fields['last_name'], 'Digite seu ultimo nome')
 
-    password_confirm = forms.CharField(
+    password = forms.PasswordInput()
+
+    password2 = forms.CharField(
         label='Confirme sua senha',
         required=True,
         widget=forms.PasswordInput(attrs={
@@ -48,3 +51,33 @@ class RegisterForm(forms.ModelForm):
                 'required': 'Você precisa preencher o campo de usuário!'
             },
         }
+
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+
+        if 'atenção' in data:
+            raise ValidationError(
+                'Não digite "Atenção" na senha',
+                code='invalid'
+            )
+
+        return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
+
+        if password != password2:
+            password_confirmation_error = ValidationError(
+                'Verifique se as senhas são iguais',
+                code='invalid'
+                )
+            
+            raise ValidationError({
+                'password': password_confirmation_error,
+                'password2': [
+                    password_confirmation_error,
+                    'Another error',
+                ],
+            })
