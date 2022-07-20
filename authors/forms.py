@@ -30,9 +30,10 @@ class RegisterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         add_placeholder(self.fields['username'], 'Seu nome de usuário')
         add_placeholder(self.fields['password'], 'Digite sua senha')
+        add_placeholder(self.fields['password2'], 'Repita sua senha')
         add_placeholder(self.fields['email'], 'Digite um e-mail válido')
         add_placeholder(self.fields['first_name'], 'Digite seu primeiro nome')
-        add_placeholder(self.fields['last_name'], 'Digite seu ultimo nome')
+        add_placeholder(self.fields['last_name'], 'Digite seu último nome')
 
     password = forms.CharField(
         label='Senha',
@@ -44,9 +45,7 @@ class RegisterForm(forms.ModelForm):
     password2 = forms.CharField(
         label='Confirme sua senha',
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Repita sua senha'
-        })
+        widget=forms.PasswordInput()
     )
 
     class Meta:
@@ -59,6 +58,13 @@ class RegisterForm(forms.ModelForm):
             'email',
         ]
 
+        labels = {
+            'first_name': 'Primeiro nome',
+            'last_name': 'Último nome',
+            'username': 'Nome de usuário',
+            'email': 'E-mail'
+        }
+
         help_texts = {
             'email': 'O e-mail precisa ser válido!'
         }
@@ -68,17 +74,6 @@ class RegisterForm(forms.ModelForm):
                 'required': 'Você precisa preencher o campo de usuário!'
             },
         }
-
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'atenção' in data:
-            raise ValidationError(
-                'Não digite "Atenção" na senha',
-                code='invalid'
-            )
-
-        return data
 
     def clean(self):
         cleaned_data = super().clean()
