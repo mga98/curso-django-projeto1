@@ -1,3 +1,4 @@
+import email
 from attr import attr, fields
 from django import forms
 from django.contrib.auth.models import User
@@ -86,6 +87,18 @@ class RegisterForm(forms.ModelForm):
             'email',
         ]
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+            raise ValidationError(
+                'Este E-mail já está sendo utilizado!',
+                code='invalid'
+            )
+
+        return email
+
     def clean(self): 
         cleaned_data = super().clean()
         password = self.cleaned_data.get('password')
@@ -101,6 +114,5 @@ class RegisterForm(forms.ModelForm):
                 'password': password_confirmation_error,
                 'password2': [
                     password_confirmation_error,
-                    'Another error',
                 ],
             })
