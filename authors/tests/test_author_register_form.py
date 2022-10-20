@@ -20,7 +20,8 @@ class AuthorRegisterFormUnitTest(TestCase):
         self.assertEqual(placeholder, current_placeholder)
 
     @parameterized.expand([
-        ('email', 'O e-mail precisa ser válido!')
+        ('email', 'O e-mail precisa ser válido!'),
+        ('username', 'O nome de usuário precisa ter entre 4 e 15 caracteres!')
     ])
     def test_help_texts_fields_are_correct(self, field, help_text):
         form = RegisterForm()
@@ -47,19 +48,65 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
             'username': 'user',
             'first_name': 'first',
             'last_name': 'last',
-            'email': 'email@email',
-            'password': 'Password12',
-            'password2': 'Password12',
+            'email': 'email@email.com',
+            'password': 'Password12.',
+            'password2': 'Password12.',
         }
 
         return super().setUp(*args, **kwargs)
 
     @parameterized.expand([
-        ('username', 'Você precisa preencher o campo de usuário!')
+        ('username', 'Você precisa preencher o campo de usuário!'),
+        ('first_name', 'Você precisa preencher o campo de primeiro nome!'),
+        ('last_name', 'Você precisa preencher o campo de último nome!'),
+        ('email', 'Você precisa preencher o campo de E-mail!'),
+        ('password', 'Você precisa preencher o campo da senha!'),
+        ('password2', 'Você precisa repetir sua senha!'),
     ])
     def test_fields_cannot_be_empty(self, field, msg):
         self.form_data[field] = ''
         url = reverse('authors:create')
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
-        
+
+    def test_username_min_length(self):
+        self.form_data['username'] = '123'
+        url = reverse('authors:create')
+        msg = 'O nome de usuário precisa ter pelo menos 4 caracteres!'
+        response = self.client.post(url, data=self.form_data, follow=True)
+        self.assertIn(msg, response.content.decode('utf-8'))
+
+    def test_username_max_length(self):
+        self.form_data['username'] = 'testmaxlengthofusername'
+        url = reverse('authors:create')
+        msg = 'O nome de usuário pode ter no máximo 15 caracteres!'
+        response = self.client.post(url, data=self.form_data, follow=True)
+        self.assertIn(msg, response.content.decode('utf-8'))
+
+    def test_password_strength(self):
+        self.form_data['password'] = 'password'
+        url = reverse('authors:create')
+        msg = 'Sua senha deve ter no mínimo uma letra maiúscula,'
+        'uma letra minúsucla e um número. '
+        'E deve ter no mínimo 8 carateres.'
+        response = self.client.post(url, data=self.form_data, follow=True)
+        self.assertIn(msg, response.content.decode('utf-8'))
+
+    def test_password_and_password2_are_equal(self):
+        self.form_data['password'] = 'Password123.'
+        self.form_data['password2'] = 'Password12.'
+        url = reverse('authors:create')
+        msg = 'Verifique se as senhas são iguais!'
+        response = self.client.post(url, data=self.form_data, follow=True)
+        self.assertIn(msg, response.content.decode('utf-8'))
+
+    def test_send_request_to_registration_create_view_returns_404(self):
+        url = reverse('authors:create')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_form_is_valid(self):
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.form_data, follow=True)
+        msg = 'Você foi registrado com sucesso!'
+        self.assertIn(msg, response.content.decode('utf-8'))

@@ -35,17 +35,45 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['first_name'], 'Digite seu primeiro nome')
         add_placeholder(self.fields['last_name'], 'Digite seu último nome')
 
+    username = forms.CharField(
+        label='Nome de usuário',
+        error_messages={
+            'required': 'Você precisa preencher o campo de usuário!',
+            'min_length': 'O nome de usuário precisa ter pelo menos 4 caracteres!',
+            'max_length': 'O nome de usuário pode ter no máximo 15 caracteres!'
+        },
+        help_text='O nome de usuário precisa ter entre 4 e 15 caracteres!',
+        min_length=4,
+        max_length=15,
+    )
+
+    first_name = forms.CharField(
+        error_messages={'required': 'Você precisa preencher o campo de primeiro nome!'},
+        label='Primeiro nome'
+    )
+
+    last_name = forms.CharField(
+        error_messages={'required': 'Você precisa preencher o campo de último nome!'},
+        label='Último nome'
+    )
+
+    email = forms.CharField(
+        error_messages={'required': 'Você precisa preencher o campo de E-mail!'},
+        label='E-mail',
+        help_text='O e-mail precisa ser válido!'
+    )
+
     password = forms.CharField(
         label='Senha',
-        required=True,
         widget=forms.PasswordInput(),
         validators=[strong_password],
+        error_messages={'required': 'Você precisa preencher o campo da senha!'}
     )
 
     password2 = forms.CharField(
         label='Confirme sua senha',
-        required=True,
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
+        error_messages={'required': 'Você precisa repetir sua senha!'}
     )
 
     class Meta:
@@ -58,31 +86,14 @@ class RegisterForm(forms.ModelForm):
             'email',
         ]
 
-        labels = {
-            'first_name': 'Primeiro nome',
-            'last_name': 'Último nome',
-            'username': 'Nome de usuário',
-            'email': 'E-mail'
-        }
-
-        help_texts = {
-            'email': 'O e-mail precisa ser válido!'
-        }
-
-        error_messages = {
-            'username': {
-                'required': 'Você precisa preencher o campo de usuário!'
-            },
-        }
-
-    def clean(self):
+    def clean(self): 
         cleaned_data = super().clean()
         password = self.cleaned_data.get('password')
         password2 = self.cleaned_data.get('password2')
 
         if password != password2:
             password_confirmation_error = ValidationError(
-                'Verifique se as senhas são iguais',
+                'Verifique se as senhas são iguais!',
                 code='invalid'
                 )
             
