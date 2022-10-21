@@ -64,14 +64,14 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         ('password2', 'Você precisa repetir sua senha!'),
     ])
     def test_fields_cannot_be_empty(self, field, msg):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         self.form_data[field] = ''
 
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_username_min_length(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         self.form_data['username'] = '123'
 
         msg = 'O nome de usuário precisa ter pelo menos 4 caracteres!'
@@ -79,7 +79,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_username_max_length(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         self.form_data['username'] = 'testmaxlengthofusername'
         
         msg = 'O nome de usuário pode ter no máximo 15 caracteres!'
@@ -87,7 +87,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_password_strength(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         self.form_data['password'] = 'password'
         
         msg = 'Sua senha deve ter no mínimo uma letra maiúscula,'
@@ -97,7 +97,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_password_and_password2_are_equal(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
 
         self.form_data['password'] = 'Password123.'
         self.form_data['password2'] = 'Password12.'
@@ -108,13 +108,13 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_send_request_to_registration_create_view_returns_404(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 404)
 
     def test_email_field_must_be_unique(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
 
         self.client.post(url, data=self.form_data, follow=True)
         response = self.client.post(url, data=self.form_data, follow=True)
@@ -124,14 +124,14 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_form_is_valid(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = 'Você foi registrado com sucesso!'
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_author_created_can_login(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         self.form_data.update({
             'username': 'testuser',
             'password': 'Testuser12.',
