@@ -5,6 +5,18 @@
 {% block content %}
     <div class="main-content center container">
         <h2>Faça seu login.</h2>
+        {% if request.user.is_authenticated %}
+            <div>Você está logado como {{ request.user.username }}!
+                Clique
+                <form class="inline-form" action="{% url 'authors:logout' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{ request.user.username }}">
+                    <button type="submit" class="plaintext-button">aqui</button>
+                </form>
+                para sair.
+            </div>
+            
+        {% endif %}
     </div>
 
     {% include 'global/partials/_messages.html' %}
