@@ -5,6 +5,9 @@ from recipes.models import Category, Recipe, User
 
 class RecipeMixin:
     def make_category(self, name='Category'):
+        """
+        Create a category for the tests.
+        """
         return Category.objects.create(name=name)
 
     def make_author(
@@ -15,6 +18,9 @@ class RecipeMixin:
         password='123456',
         email='username@email.com',
         ):
+        """
+        Create an author for the tests.
+        """
 
         return User.objects.create_user(
             first_name=first_name,
@@ -39,6 +45,9 @@ class RecipeMixin:
         preparation_steps_is_html=False,
         is_published=True,
     ):
+        """
+        Create a recipe for the tests.
+        """
 
         # Creates an empty dictionary if there is no data in the category model.
         if category_data is None:
@@ -62,6 +71,24 @@ class RecipeMixin:
             preparation_steps_is_html=preparation_steps_is_html,
             is_published=is_published,
         )
+    
+    def make_recipe_in_batch(self, qtd=10):
+        """
+        Creates several recipes for the tests.
+        """
+        recipes = []
+
+        for i in range(qtd):
+            kwargs = {
+                'title': f'Recipe Title {i}',
+                'slug': f'r{i}',
+                'author_data': {'username': f'u{i}'}
+            }
+
+            recipe = self.make_recipe(**kwargs)
+            recipes.append(recipe)
+
+        return recipes
 
 
 class RecipeTestBase(TestCase, RecipeMixin):
