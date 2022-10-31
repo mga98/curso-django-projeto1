@@ -40,7 +40,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
 
     @patch('recipes.views.PER_PAGE', new=2)
     def test_recipe_home_page_pagination(self):
-        recipes = self.make_recipe_in_batch()
+        self.make_recipe_in_batch()
 
         self.browser.get(self.live_server_url)
 
@@ -54,4 +54,4 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         self.assertEqual(
             len(self.browser.find_elements(By.CLASS_NAME, 'recipe')),
             2
-        )
+        )  # Check for two recipes on page 2.
