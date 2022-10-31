@@ -1,3 +1,4 @@
+from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -35,4 +36,22 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         self.assertIn(
             title_needed,
             body
+        )
+
+    @patch('recipes.views.PER_PAGE', new=2)
+    def test_recipe_home_page_pagination(self):
+        recipes = self.make_recipe_in_batch()
+
+        self.browser.get(self.live_server_url)
+
+        page2 = self.browser.find_element(
+            By.XPATH,
+            '//a[@aria-label="Go to page 2"]'  # "Go to page 2" is the aria-label in _pagination.html
+        )
+
+        page2.click()
+
+        self.assertEqual(
+            len(self.browser.find_elements(By.CLASS_NAME, 'recipe')),
+            2
         )
