@@ -1,8 +1,8 @@
 import time
 
 import pytest
-from django.urls import reverse
 from django.contrib.auth.models import User
+from django.urls import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -35,9 +35,25 @@ class AuthorsLoginTest(AuthorBaseFunctionalTest):
 
         self.assertIn('Você foi logado com sucesso!' , body.text)
 
-    def test_user_login_error(self):
+    def test_user_login_invalid_credentials(self):
         self.make_login(usernametest='usere-rror', passwordtest='password-error')
 
         body = self.browser.find_element(By.TAG_NAME, 'body')
 
         self.assertIn('Login ou senha inválidos.', body.text)
+
+    def test_login_create_raises_404_if_not_POST_method(self):
+        self.browser.get(
+            self.live_server_url + reverse('authors:login_create')
+        )
+        
+        body = self.browser.find_element(By.TAG_NAME, 'body')
+
+        self.assertIn('Not Found', body.text)
+
+    def test_user_login_invalid(self):
+        self.make_login(usernametest='', passwordtest='')
+
+        body = self.browser.find_element(By.TAG_NAME, 'body')
+
+        self.assertIn('Erro ao validar as informações do formulário.', body.text)
