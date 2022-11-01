@@ -1,18 +1,15 @@
 import time
+import pytest
 
+from django.urls import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 from .test_base import AuthorBaseFunctionalTest
 
 
+@pytest.mark.functional_test
 class AuthorsRegisterTest(AuthorBaseFunctionalTest):
-    def get_by_placeholder(self, web_element, placeholder):
-        return web_element.find_element(
-            By.XPATH,
-            f'//input[@placeholder="{placeholder}"]'
-        )
-
     def fill_form_data(self, form, keys):
         fields = form.find_elements(By.TAG_NAME, 'input')
 
@@ -27,7 +24,7 @@ class AuthorsRegisterTest(AuthorBaseFunctionalTest):
         )
 
     def form_field_test_with_callback(self, callback, email='email@email.com', input_key=' ' * 10):
-        self.browser.get(self.live_server_url + '/authors/register/')
+        self.browser.get(self.live_server_url + reverse('authors:register'))
 
         form = self.get_form()
 
