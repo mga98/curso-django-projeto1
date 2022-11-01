@@ -65,6 +65,9 @@ def login_create(request):
         if authenticated_user is not None:
             messages.success(request, 'Você foi logado com sucesso!')
             login(request, authenticated_user)
+
+            return redirect(reverse('authors:dashboard'))
+
         else:
             messages.error(request, 'Login ou senha inválidos.')
 
@@ -84,6 +87,12 @@ def logout_view(request):
         messages.error(request, 'Usuário de logout inválido!')
         return redirect(reverse('authors:login'))
 
-    messages.warning(request, 'Você foi deslogado.')
     logout(request)
+    messages.warning(request, 'Você foi deslogado.')
     return redirect(reverse('authors:login'))
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_view(request):
+
+    return render(request, 'author/pages/dashboard_view.html')
