@@ -6,6 +6,23 @@
     <div class="main-content center container">
         <h2>Dashboard ({{ user.first_name }})</h2>
         {% include 'author/partials/_login_message.html' %}
+
+        <div class="authors-dashboard-container">
+            <h2>Receitas de {{ user.first_name }}:</h2>
+            <ul>
+                {% for recipe in recipes %}
+                    <li>
+                        <i class="fas fa-utensils"></i>
+                        <a href="#">{{ recipe.title }}</a>
+                        <p>{{ recipe.category }}</p>
+                    </li>
+                {% empty %}
+                    <li>
+                        <p>Você ainda não tem nenhuma receita publicada. Clique <a href="">aqui</a> para criar uma!</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
     {% include 'global/partials/_messages.html' %}

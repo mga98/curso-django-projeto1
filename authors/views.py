@@ -1,16 +1,17 @@
-from django.http import Http404
-from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from recipes.models import Recipe
 
-from .forms import RegisterForm, LoginForm
+from .forms import LoginForm, RegisterForm
 
 
 def register_view(request):
     register_form_data = request.session.get('register_form_data', None)
-    
+
     form = RegisterForm(register_form_data)
 
     return render(request, 'author/pages/register_view.html', context={
@@ -31,7 +32,8 @@ def register_create(request):
         user = form.save(commit=False)
         user.set_password(user.password)
         user.save()
-        messages.success(request, 'Você foi registrado com sucesso! Faça seu login.')
+        messages.success(
+            request, 'Você foi registrado com sucesso! Faça seu login.')
 
         del(request.session['register_form_data'])
 
@@ -72,8 +74,9 @@ def login_create(request):
             messages.error(request, 'Login ou senha inválidos.')
 
     else:
-        messages.error(request, 'Erro ao validar as informações do formulário.')
-    
+        messages.error(
+            request, 'Erro ao validar as informações do formulário.')
+
     return redirect(login_url)
 
 
@@ -94,5 +97,11 @@ def logout_view(request):
 
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard_view(request):
+    recipes = Recipe.objects.filter(
+        is_published=False,
+        author=request.user,
+    )
 
-    return render(request, 'author/pages/dashboard_view.html')
+    return render(request, 'author/pages/dashboard_view.html', context={
+        'recipes': recipes,
+    })
