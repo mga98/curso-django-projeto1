@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from recipes.models import Recipe
 
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, AuthorsRecipeForm
 
 
 def register_view(request):
@@ -111,6 +111,12 @@ def dashboard_view(request):
 def recipe_edit(request, id):
     recipe = get_object_or_404(Recipe, id=id)
 
+    form = AuthorsRecipeForm(
+        request.POST or None,
+        instance=recipe,
+    )
+
     return render(request, 'author/pages/dashboard_edit_view.html', context={
         'recipe': recipe,
+        'form': form,
     })

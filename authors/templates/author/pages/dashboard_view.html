@@ -19,7 +19,7 @@
                     </li>
                 {% empty %}
                     <li>
-                        <p>Você ainda não tem nenhuma receita publicada. Clique <a href="">aqui</a> para criar uma!</p>
+                        <p>Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="{% url 'authors:recipe_edit' %}">aqui</a> para criar uma!</p>
                     </li>
                 {% endfor %}
             </ul>

@@ -59,6 +59,10 @@ body {
     color: var(--color-dark-text)
 }
 
+img {
+    max-width: 100%;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headings);
 }
@@ -296,6 +300,10 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
+.left {
+    text-align: left;
+}
+
 .m-x {
     margin: 0 var(--spacing-gutter-medium)
 }
@@ -350,7 +358,9 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-error-dark);
 }
 
-.form-content input {
+.form-content input,
+.form-content textarea,
+.form-content select {
     width: 100%;
     padding: 1rem;
     border-radius: .4rem;
@@ -379,6 +389,10 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     cursor: pointer;
     color: var(--color-primary);
+}
+
+.span-2 {
+    grid-column: span 2;
 }
 
 /* Messages */
@@ -495,6 +509,21 @@ color: var(--color-debug-dark);
     position: absolute;
     top: 1rem;
     left: 1rem;
+    color: var(--color-primary-hover)
+}
+
+.dashboard-page-link {
+    padding: 1rem;
+    background-color: var(--color-primary-dark);
+    color: var(--color-primary-light);
+}
+
+.links {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+.links:hover {
     color: var(--color-primary-hover)
 }
 
