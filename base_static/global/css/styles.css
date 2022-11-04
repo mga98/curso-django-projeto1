@@ -473,7 +473,7 @@ color: var(--color-debug-dark);
     box-shadow: 0.4rem 0.4rem 1rem var(--color-gray-5);
 }
 
-.authors-dashboard-container li {
+.authors-dashboard-container .recipe-list-item {
     position: relative;
     display: flex;
     align-items: center;
@@ -481,12 +481,12 @@ color: var(--color-debug-dark);
     color: var(--color-dark-text);
 }
 
-.authors-dashboard-container li:hover {
+.authors-dashboard-container .recipe-list-item:hover {
     background-color: var(--color-primary-dark);
     color: var(--color-primary-light)
 }
 
-.authors-dashboard-container li:hover a {
+.authors-dashboard-container .recipe-list-item:hover a {
     color: var(--color-primary-light);
 }
 
@@ -516,6 +516,15 @@ color: var(--color-debug-dark);
     padding: 1rem;
     background-color: var(--color-primary-dark);
     color: var(--color-primary-light);
+}
+
+.empty-recipe-list a {
+    display: inline;
+    padding: 0;
+}
+
+.empty-recipe-list p {
+    padding-right: 0;
 }
 
 .links {

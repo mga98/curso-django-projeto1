@@ -12,18 +12,19 @@
             <h2>Receitas de {{ user.first_name }}:</h2>
             <ul>
                 {% for recipe in recipes %}
-                    <li>
+                    <li class="recipe-list-item">
                         <i class="fas fa-utensils"></i>
                         <a href="{% url 'authors:recipe_edit' recipe.id %}">{{ recipe.title }}</a>
                         <p>{{ recipe.category }}</p>
                     </li>
                 {% empty %}
-                    <li>
-                        <p>Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="{% url 'authors:recipe_edit' %}">aqui</a> para criar uma!</p>
+                    <li class="empty-recipe-list">
+                        <p>Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="#">aqui</a> para criar uma!</p>
                     </li>
                 {% endfor %}
             </ul>
         </div>
+
     </div>
 
 {% endblock content %}
