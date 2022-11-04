@@ -5,6 +5,7 @@
 {% block content %}
     <div class="main-content center container">
         <h2>Dashboard ({{ user.first_name }})</h2>
+        {% include 'global/partials/_messages.html' %}
         {% include 'author/partials/_login_message.html' %}
 
         <div class="authors-dashboard-container">
@@ -13,7 +14,7 @@
                 {% for recipe in recipes %}
                     <li>
                         <i class="fas fa-utensils"></i>
-                        <a href="#">{{ recipe.title }}</a>
+                        <a href="{% url 'authors:recipe_edit' recipe.id %}">{{ recipe.title }}</a>
                         <p>{{ recipe.category }}</p>
                     </li>
                 {% empty %}
@@ -24,7 +25,5 @@
             </ul>
         </div>
     </div>
-
-    {% include 'global/partials/_messages.html' %}
 
 {% endblock content %}

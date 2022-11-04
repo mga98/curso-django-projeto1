@@ -5,6 +5,7 @@
 {% block content %}
     <div class="main-content center container">
         <h2>Login</h2>
+        <p>Não tem uma conta? Cadastre-se <a href="{% url 'authors:register' %}">aqui</a>!</p>
         {% include 'author/partials/_login_message.html' %}
     </div>
 

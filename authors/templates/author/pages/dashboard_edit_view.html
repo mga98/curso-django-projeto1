@@ -1,0 +1,14 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Dashboard ({{ recipe.title }}){% endblock title %}
+
+{% block content %}
+    <div class="main-content center container">
+        <h2>{{ recipe.title }}</h2>
+
+        <div class="authors-dashboard-container">
+            {% include 'global/partials/_form.html' %}
+        </div>
+    </div>
+
+{% endblock content %}

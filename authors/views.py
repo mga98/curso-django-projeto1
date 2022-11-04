@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from recipes.models import Recipe
 
@@ -104,4 +104,13 @@ def dashboard_view(request):
 
     return render(request, 'author/pages/dashboard_view.html', context={
         'recipes': recipes,
+    })
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def recipe_edit(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+
+    return render(request, 'author/pages/dashboard_edit_view.html', context={
+        'recipe': recipe,
     })
