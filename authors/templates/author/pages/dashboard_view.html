@@ -12,7 +12,7 @@
             <h2>Receitas de {{ user.first_name }}:</h2>
             <ul>
                 {% for recipe in recipes %}
-                    <li class="recipe-list-item">
+                    <li class="user-recipe-list-item">
                         <i class="fas fa-utensils"></i>
                         <a href="{% url 'authors:recipe_edit' recipe.id %}">{{ recipe.title }}</a>
                         <p>{{ recipe.category }}</p>

@@ -473,20 +473,23 @@ color: var(--color-debug-dark);
     box-shadow: 0.4rem 0.4rem 1rem var(--color-gray-5);
 }
 
-.authors-dashboard-container .recipe-list-item {
+.authors-dashboard-container .user-recipe-list-item {
     position: relative;
     display: flex;
     align-items: center;
-    transition: all ease-in-out 100ms;
+    transition: all ease-in-out 200ms;
     color: var(--color-dark-text);
 }
 
-.authors-dashboard-container .recipe-list-item:hover {
+.authors-dashboard-container .user-recipe-list-item:hover {
     background-color: var(--color-primary-dark);
-    color: var(--color-primary-light)
+    color: var(--color-primary-light);
+    transform: scale(1.03);
+    box-shadow: 0.2rem 0.2rem 0.8rem var(--color-gray-7);
+    opacity: 0.95;
 }
 
-.authors-dashboard-container .recipe-list-item:hover a {
+.authors-dashboard-container .user-recipe-list-item:hover a {
     color: var(--color-primary-light);
 }
 
@@ -512,10 +515,27 @@ color: var(--color-debug-dark);
     color: var(--color-primary-hover)
 }
 
+.center-link {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
 .dashboard-page-link {
+    text-decoration: none;
+    display: block;
+    width: 13rem;
+    text-align: center;
     padding: 1rem;
     background-color: var(--color-primary-dark);
     color: var(--color-primary-light);
+    transition: all ease-in-out 300ms;
+}
+
+.dashboard-page-link:hover {
+    background-color: var(--color-primary-dark-hover);
+    color: var(--color-primary-light-hover);
+    width: 15rem;
 }
 
 .empty-recipe-list a {
@@ -539,5 +559,9 @@ color: var(--color-debug-dark);
 @media (max-width: 600px) {
     .main-content-list, .form-content-grid {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
+
+    .span-2 {
+        grid-column: span 1;
     }
 }

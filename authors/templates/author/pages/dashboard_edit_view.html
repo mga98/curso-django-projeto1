@@ -6,7 +6,9 @@
     <div class="main-content center container">
         <h2>{{ recipe.title }}</h2>
 
-        <p class="dashboard-page-link">Veja suas <a class="links" href="{% url 'authors:dashboard' %}">receitas</a>.</p>
+        <div class="center-link">
+            <a class="dashboard-page-link" href="{% url 'authors:dashboard' %}">Suas receitas</a>
+        </div>
 
         <div class="left">
             {% include 'global/partials/_form.html' %}

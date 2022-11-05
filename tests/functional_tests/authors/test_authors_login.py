@@ -46,7 +46,7 @@ class AuthorsLoginTest(AuthorBaseFunctionalTest):
         self.browser.get(
             self.live_server_url + reverse('authors:login_create')
         )
-        
+
         body = self.browser.find_element(By.TAG_NAME, 'body')
 
         self.assertIn('Not Found', body.text)
