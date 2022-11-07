@@ -13,6 +13,8 @@
                 <h2>Receitas de {{ user.first_name }}:</h2>
                 <a href="{% url 'authors:recipe_create' %}">+</a>
             </div>
+
+            {% if recipes %}
             <ul>
                 {% for recipe in recipes %}
                     <li class="user-recipe-list-item">
@@ -20,12 +22,13 @@
                         <a href="{% url 'authors:recipe_edit' recipe.id %}">{{ recipe.title }}</a>
                         <p>{{ recipe.category }}</p>
                     </li>
-                {% empty %}
-                    <li class="empty-recipe-list">
-                        <p>Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="{% url 'authors:recipe_create' %}">aqui</a> para criar uma!</p>
-                    </li>
                 {% endfor %}
             </ul>
+            {% else %}
+                <div class="empty-recipe-list">
+                    <p "empy-recipe-text">Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="{% url 'authors:recipe_create' %}">aqui</a> para criar uma!</p>
+                </div>
+            {% endif %}
         </div>
 
     </div>

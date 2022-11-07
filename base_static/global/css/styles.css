@@ -461,10 +461,6 @@ color: var(--color-debug-dark);
     margin-top: var(--spacing-gutter-medium);
 }
 
-.authors-dashboard-container h2 {
-    
-}
-
 .authors-dashboard-container ul {
     list-style: none;
     margin-top: 1rem;
@@ -569,6 +565,10 @@ color: var(--color-debug-dark);
     width: 15rem;
 }
 
+.empty-recipe-list {
+    margin-top: 1rem;
+}
+
 .empty-recipe-list a {
     display: inline;
     padding: 0;
@@ -576,6 +576,8 @@ color: var(--color-debug-dark);
 
 .empty-recipe-list p {
     padding-right: 0;
+    width: 100%;
+    text-align: center;
 }
 
 .links {
