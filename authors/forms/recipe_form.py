@@ -13,7 +13,7 @@ class AuthorsRecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ('title', 'description', 'preparation_time', 'preparation_time_unit',
-                  'preparation_steps', 'servings', 'servings_unit', 'cover')
+                  'preparation_steps', 'servings', 'servings_unit', 'cover', 'category')
 
         widgets = {
             'cover': forms.FileInput(
@@ -33,5 +33,14 @@ class AuthorsRecipeForm(forms.ModelForm):
                     ('Minutos', 'Minutos'),
                     ('Horas', 'Horas'),
                 }
-            )
+            ),
+            'category': forms.Select(
+                attrs={
+                    'class': 'span-2',
+                }
+            ),
+        }
+
+        prepopulated_fields = {
+        'slug': ('title',)
         }

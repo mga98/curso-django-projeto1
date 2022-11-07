@@ -100,7 +100,7 @@ def dashboard_view(request):
     recipes = Recipe.objects.filter(
         is_published=False,
         author=request.user,
-    )
+    ).order_by('-id')
 
     return render(request, 'author/pages/dashboard_view.html', context={
         'recipes': recipes,
@@ -126,11 +126,37 @@ def recipe_edit(request, id):
 
         recipe.save()
 
-        messages.success(request, 'Sua receita foi salva com sucesso!')
+        messages.success(request, 'Sua receita foi editada com sucesso!')
 
         return redirect(reverse('authors:dashboard'))
 
     return render(request, 'author/pages/dashboard_edit_view.html', context={
         'recipe': recipe,
+        'form': form,
+    })
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def recipe_create(request):
+    form = AuthorsRecipeForm(
+        request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+        recipe.slug = 'test-slugfield'
+
+        recipe.save()
+
+        messages.success(request, 'Sua receita foi criada com sucesso!')
+
+        return redirect(reverse('authors:dashboard'))
+
+    return render(request, 'author/pages/dashboard_edit_view.html', context={
         'form': form,
     })

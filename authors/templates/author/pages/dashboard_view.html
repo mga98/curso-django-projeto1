@@ -9,7 +9,10 @@
         {% include 'author/partials/_login_message.html' %}
 
         <div class="authors-dashboard-container">
-            <h2>Receitas de {{ user.first_name }}:</h2>
+            <div class="authors-menu">
+                <h2>Receitas de {{ user.first_name }}:</h2>
+                <a href="{% url 'authors:recipe_create' %}">+</a>
+            </div>
             <ul>
                 {% for recipe in recipes %}
                     <li class="user-recipe-list-item">
@@ -19,7 +22,7 @@
                     </li>
                 {% empty %}
                     <li class="empty-recipe-list">
-                        <p>Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="#">aqui</a> para criar uma!</p>
+                        <p>Você ainda não tem nenhuma receita publicada. Clique <a class="links" href="{% url 'authors:recipe_create' %}">aqui</a> para criar uma!</p>
                     </li>
                 {% endfor %}
             </ul>
