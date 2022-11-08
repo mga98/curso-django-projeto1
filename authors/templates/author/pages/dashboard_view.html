@@ -21,10 +21,10 @@
                         <i class="fas fa-utensils"></i>
                         <a href="{% url 'authors:recipe_edit' recipe.id %}">{{ recipe.title }}</a>
                         <p>{{ recipe.category }}</p>
-                        <form class="inline-form" action="" method="POST">
+                        <form class="inline-form form-delete" action="{% url 'authors:recipe_delete' %}" method="POST">
                             {% csrf_token %}
-
-                            <button class="plaintext-button delete-button">X</button>
+                            <input type="hidden" name="id" value="{{ recipe.id }}">
+                            <button class="plaintext-button delete-button" type="submit">X</button>
                         </form>
                     </li>
                 {% endfor %}

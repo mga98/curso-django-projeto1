@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.text import slugify
 from django.urls import reverse
 from recipes.models import Recipe
 
@@ -98,7 +99,6 @@ def logout_view(request):
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard_view(request):
     recipes = Recipe.objects.filter(
-        is_published=False,
         author=request.user,
     ).order_by('-id')
 
@@ -149,7 +149,7 @@ def recipe_create(request):
         recipe.author = request.user
         recipe.preparation_steps_is_html = False
         recipe.is_published = False
-        recipe.slug = 'test-slugfield'
+        recipe.slug = slugify(recipe.title, allow_unicode=True)
 
         recipe.save()
 
@@ -160,3 +160,18 @@ def recipe_create(request):
     return render(request, 'author/pages/dashboard_edit_view.html', context={
         'form': form,
     })
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_delete(request):
+    if not request.POST:
+        raise Http404
+    
+    POST = request.POST
+    id = POST.get('id')
+
+    recipe = get_object_or_404(Recipe, id=id)
+
+    recipe.delete()
+    messages.info(request, f'Receita ({recipe.title}) deletada com sucesso!')
+
+    return redirect(reverse('authors:dashboard'))
