@@ -469,32 +469,6 @@ color: var(--color-debug-dark);
     box-shadow: 0.4rem 0.4rem 1rem var(--color-gray-5);
 }
 
-.authors-dashboard-container .user-recipe-list-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    transition: all ease-in-out 200ms;
-    color: var(--color-dark-text);
-}
-
-.authors-dashboard-container .user-recipe-list-item:hover {
-    background-color: var(--color-primary-dark);
-    color: var(--color-primary-light);
-    transform: scale(1.03);
-    box-shadow: 0.2rem 0.2rem 0.8rem var(--color-gray-7);
-    opacity: 0.95;
-}
-
-.authors-dashboard-container .user-recipe-list-item:hover a {
-    color: var(--color-primary-light);
-}
-
-.authors-dashboard-container p {
-    padding-right: 1rem;
-    text-align: right;
-    width: 150px;
-}
-
 .authors-dashboard-container li {
     border-bottom: 0.1rem solid var(--color-gray-3);
 }
@@ -510,7 +484,33 @@ color: var(--color-debug-dark);
     transition: all ease-in-out 100ms;
 }
 
-.authors-dashboard-container i {
+.user-recipe-list-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: all ease-in-out 200ms;
+    color: var(--color-dark-text);
+}
+
+.user-recipe-list-item:hover {
+    background-color: var(--color-primary-dark);
+    color: var(--color-primary-light);
+    transform: scale(1.03);
+    box-shadow: 0.2rem 0.2rem 0.8rem var(--color-gray-7);
+    opacity: 0.95;
+}
+
+.user-recipe-list-item:hover a {
+    color: var(--color-primary-light);
+}
+
+.user-recipe-list-item p {
+    padding-right: 1rem;
+    text-align: right;
+    width: 150px;
+}
+
+.user-recipe-list-item i {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -540,6 +540,18 @@ color: var(--color-debug-dark);
 .authors-menu a:hover {
     background-color: var(--color-primary-dark-hover);
     color: var(--color-primary-light-hover);
+}
+
+.delete-button {
+    color: var(--color-primary-light);
+    padding: 1.2rem;
+    font-size: 1.6rem;
+    transition: all 300ms ease-in-out;
+    background-color: var(--color-primary-dark);
+}
+
+.delete-button:hover {
+    background-color: rgb(249, 36, 36);
 }
 
 .center-link {
@@ -589,7 +601,7 @@ color: var(--color-debug-dark);
     color: var(--color-primary-hover)
 }
 
-@media (max-width: 600px) {
+@media (max-width: 450px) {
     .main-content-list, .form-content-grid {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
@@ -597,4 +609,40 @@ color: var(--color-debug-dark);
     .span-2 {
         grid-column: span 1;
     }
+
+    .user-recipe-list-item a, p {
+        font-size: 12px;
+    }
+
+    .main-logo {
+        font-size: 2.5rem;
+    }
+
+    .authors-dashboard-container {
+        padding: 0.1rem;
+        border: none;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .authors-dashboard-container ul {
+        border: none;
+    }
+
+    .user-recipe-list-item a {
+        overflow: hidden;
+    }
+
+    .user-recipe-list-item p {
+        width: 70px;
+    }
+
+    .delete-button {
+        padding: 1.8rem 1.5rem 1.8rem;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+    
 }
