@@ -143,20 +143,26 @@ def recipe_create(request):
         files=request.FILES or None,
     )
 
-    if form.is_valid():
-        recipe = form.save(commit=False)
+    try:
+        if form.is_valid():
+            recipe = form.save(commit=False)
 
-        recipe.author = request.user
-        recipe.preparation_steps_is_html = False
-        recipe.is_published = False
-        recipe.slug = slugify(recipe.title, allow_unicode=True)
+            recipe.author = request.user
+            recipe.preparation_steps_is_html = False
+            recipe.is_published = False
+            recipe.slug = slugify(recipe.title, allow_unicode=True)
 
-        recipe.save()
+            recipe.save()
 
-        messages.success(request, 'Sua receita foi criada com sucesso!')
+            messages.success(request, 'Sua receita foi criada com sucesso!')
 
-        return redirect(reverse('authors:dashboard'))
+            return redirect(reverse('authors:dashboard'))
 
+    except TypeError:
+        messages.error(request, 'Erro ao validar formulário!')
+
+        return redirect(reverse('authors:recipe_create'))
+    
     return render(request, 'author/pages/dashboard_edit_view.html', context={
         'form': form,
     })
@@ -165,7 +171,7 @@ def recipe_create(request):
 def dashboard_recipe_delete(request):
     if not request.POST:
         raise Http404
-    
+
     POST = request.POST
     id = POST.get('id')
 

@@ -5,7 +5,7 @@ from parameterized import parameterized
 from recipes.tests.test_recipe_base import RecipeMixin, RecipeTestBase
 
 
-class RecipeEditUnitTest(RecipeTestBase, RecipeMixin):
+class RecipeCreateUnitTest(RecipeTestBase, RecipeMixin):
     def setUp(self, *args, **kwargs):
         self.recipe_create_data = {
             'title': 'Recipe Title',
@@ -29,30 +29,26 @@ class RecipeEditUnitTest(RecipeTestBase, RecipeMixin):
             username='usertest',
             password='Testuser@1',
         )
-    
-    def create_recipe_and_login(self):
-        self.make_recipe()
-        self.client.login(
-            username='username',
-            password='123456',
-        )
 
-    def test_recipe_edit_loads_correct_recipe(self):
-        recipe_title = 'Recipe Title'
+    def test_recipe_succesfully_created(self):
+        self.user_register_and_login()
 
-        self.create_recipe_and_login()
+        url = reverse('authors:recipe_create')
+        response = self.client.post(
+            url, data=self.recipe_create_data, follow=True)
 
-        response = self.client.get(reverse('authors:recipe_edit', kwargs={'id': 1}), follow=True)
-        content = response.content.decode('utf-8')
+        msg = 'Sua receita foi criada com sucesso!'
 
-        self.assertIn(recipe_title, content)
+        self.assertIn(msg, response.content.decode('utf-8'))
 
-    def test_succesfully_recipe_edit(self):
-        self.create_recipe_and_login()
+    def test_recipe_create_form_not_valid(self):
+        self.user_register_and_login()
 
-        url = reverse('authors:recipe_edit', kwargs={'id': 1})
+        self.recipe_create_data['title'] = ''
+
+        url = reverse('authors:recipe_create')
         response = self.client.post(url, data=self.recipe_create_data, follow=True)
 
-        msg = 'Sua receita foi editada com sucesso!'
+        msg = 'Erro ao validar formulário!'
 
         self.assertIn(msg, response.content.decode('utf-8'))
