@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
-from django.urls import resolve, reverse
-from parameterized import parameterized
+from django.urls import reverse
 
 from recipes.tests.test_recipe_base import RecipeMixin, RecipeTestBase
 
