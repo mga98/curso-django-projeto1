@@ -171,7 +171,7 @@ def recipe_create(request):
 def dashboard_recipe_delete(request):
     if not request.POST:
         raise Http404
-
+ 
     POST = request.POST
     id = POST.get('id')
 
