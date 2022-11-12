@@ -1,21 +1,9 @@
-from django.contrib.auth.models import User
 from django.urls import reverse
 
-from recipes.tests.test_recipe_base import RecipeTestBase
+from .test_authors_base import AuthorsTestBase
 
 
-class AuthorDashboard(RecipeTestBase):
-    def user_register_and_login(self):
-        User.objects.create_user(
-            username='usertest',
-            password='Testuser@1'
-        )
-
-        self.client.login(
-            username='usertest',
-            password='Testuser@1',
-        )
-
+class AuthorDashboard(AuthorsTestBase):
     def test_dashboard_loads_recipes(self):
         self.make_recipe(
             title='Recipe in dashboard'

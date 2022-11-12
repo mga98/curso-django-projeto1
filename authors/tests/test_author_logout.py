@@ -1,23 +1,9 @@
-from django.test import TestCase
-
-from django.contrib.auth.models import User
 from django.urls import reverse
 
-import pytest
+from .test_authors_base import AuthorsTestBase
 
 
-class AuthorLogoutTest(TestCase):
-    def user_register_and_login(self):
-        User.objects.create_user(
-            username='usertest',
-            password='Testuser@1'
-        )
-
-        self.client.login(
-            username='usertest',
-            password='Testuser@1',
-        )
-
+class AuthorLogoutTest(AuthorsTestBase):
     def test_user_tries_to_logout_using_GET_method(self):
         self.user_register_and_login()
 

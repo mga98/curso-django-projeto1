@@ -1,32 +1,9 @@
-from django.contrib.auth.models import User
 from django.urls import reverse
 
-from recipes.tests.test_recipe_base import RecipeMixin, RecipeTestBase
+from .test_authors_base import AuthorsTestBase
 
 
-class RecipeFormUnitTest(RecipeTestBase, RecipeMixin):
-    def setUp(self, *args, **kwargs):
-        self.recipe_form_data = {
-            'title': 'Recipe Title',
-            'description': 'Recipe Description',
-            'preparation_time': '1',
-            'preparation_time_unit': 'Horas',
-            'preparation_steps': 'A' * 11,
-            'servings': '1',
-            'servings_unit': 'Unidades',
-        }
-
-    def user_register_and_login(self):
-        User.objects.create_user(
-            username='usertest',
-            password='Testuser@1'
-        )
-
-        self.client.login(
-            username='usertest',
-            password='Testuser@1',
-        )
-
+class RecipeFormUnitTest(AuthorsTestBase):
     def field_values_tests(self, field, value):
         self.user_register_and_login()
 

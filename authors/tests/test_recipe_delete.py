@@ -1,16 +1,9 @@
 from django.urls import reverse
 
-from recipes.tests.test_recipe_base import RecipeMixin, RecipeTestBase
+from .test_authors_base import AuthorsTestBase
 
 
-class RecipeDeleteUnitTest(RecipeTestBase, RecipeMixin):
-    def create_recipe_and_login(self):
-        self.make_recipe()
-        self.client.login(
-            username='username',
-            password='123456',
-        )
-
+class RecipeDeleteUnitTest(AuthorsTestBase):
     def test_recipe_delete_get_method_returns_404(self):
         self.create_recipe_and_login()
 
