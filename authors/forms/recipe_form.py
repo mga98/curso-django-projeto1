@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from collections import defaultdict
 
 from recipes.models import Recipe
-from utils.django_forms import add_attr
+from utils.django_forms import add_attr, add_placeholder
 from utils.strings import is_positive
 
 
@@ -14,6 +14,9 @@ class AuthorsRecipeForm(forms.ModelForm):
         self._my_errors = defaultdict(list) 
 
         add_attr(self.fields.get('preparation_steps'), 'class', 'span-2')
+        add_placeholder(self.fields['title'], 'Título da receita')
+        add_placeholder(self.fields['description'], 'Descrição da receita')
+        add_placeholder(self.fields['preparation_steps'], 'Etapas de preparo da receita')
 
     class Meta:
         model = Recipe

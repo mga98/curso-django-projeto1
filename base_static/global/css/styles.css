@@ -67,6 +67,10 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headings);
 }
 
+textarea {
+    font-family: var(--font-primary);
+}
+
 .description {
     font-size: 1.8rem;
     font-family: var(--font-primary);
@@ -642,7 +646,10 @@ color: var(--color-debug-dark);
     }
 
     .main-content {
-        padding: 0;
+        padding: 0.5rem;
     }
     
+    .user-recipe-list-item i {
+        top: 2rem;
+    }
 }

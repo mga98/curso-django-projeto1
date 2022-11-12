@@ -11,7 +11,7 @@ class AuthorLogoutTest(AuthorsTestBase):
         error_message = 'Logout não pode ser executado!'
 
         self.assertIn(error_message, response.content.decode('utf-8'))
-    
+
     def test_user_tries_to_logout_another_user(self):
         self.user_register_and_login()
 
