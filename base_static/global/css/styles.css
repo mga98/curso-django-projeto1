@@ -605,7 +605,7 @@ color: var(--color-debug-dark);
     color: var(--color-primary-hover)
 }
 
-@media (max-width: 450px) {
+@media (max-width: 550px) {
     .main-content-list, .form-content-grid {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
