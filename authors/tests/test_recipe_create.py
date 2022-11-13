@@ -1,5 +1,7 @@
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
+from recipes.models import Recipe
 from .test_authors_base import AuthorsTestBase
 
 class RecipeCreateUnitTest(AuthorsTestBase):
@@ -25,3 +27,13 @@ class RecipeCreateUnitTest(AuthorsTestBase):
         msg = 'Erro ao validar formulário!'
 
         self.assertIn(msg, response.content.decode('utf-8'))
+
+    def test_created_recipe_is_not_published(self):
+        self.user_register_and_login()
+
+        url = reverse('authors:recipe_create')
+        self.client.post(url, data=self.recipe_form_data, follow=True)
+
+        recipe = get_object_or_404(Recipe, id=1)
+
+        self.assertFalse(recipe.is_published)

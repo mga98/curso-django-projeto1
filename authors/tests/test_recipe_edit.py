@@ -1,6 +1,8 @@
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
 from .test_authors_base import AuthorsTestBase
+from recipes.models import Recipe
 
 
 class RecipeEditUnitTest(AuthorsTestBase):
@@ -23,3 +25,13 @@ class RecipeEditUnitTest(AuthorsTestBase):
         msg = 'Sua receita foi editada com sucesso!'
 
         self.assertIn(msg, response.content.decode('utf-8'))
+    
+    def test_edited_recipe_is_not_published(self):
+        self.create_recipe_and_login()
+        self.recipe_form_data['title'] = 'Change title.'
+        
+        url = reverse('authors:recipe_edit', kwargs={'id': 1})
+        self.client.post(url, data=self.recipe_form_data, follow=True)
+        recipe = get_object_or_404(Recipe, id=1)
+
+        self.assertFalse(recipe.is_published)
