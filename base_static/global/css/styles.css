@@ -664,4 +664,8 @@ color: var(--color-debug-dark);
     .user-recipe-list-item i {
         top: 2rem;
     }
+
+    .user-recipe-list-item:hover {
+        transform: scale(1.01);
+    }
 }
