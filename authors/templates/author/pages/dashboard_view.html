@@ -17,10 +17,18 @@
             {% if recipes %}
             <ul>
                 {% for recipe in recipes %}
-                    <li class="user-recipe-list-item">
+
+                    <li class="
+                    user-recipe-list-item
+                    {% if recipe.is_published %}
+                        published
+                    {% else %}
+                        not-published
+                    {% endif %}">
+
                         <i class="fas fa-utensils"></i>
                         <a href="{% url 'authors:recipe_edit' recipe.id %}">{{ recipe.title }}</a>
-                        <p>{{ recipe.category }}</p>
+                        <p class="recipe-category">{{ recipe.category }}</p>
                         <form class="inline-form form-delete" action="{% url 'authors:recipe_delete' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="id" value="{{ recipe.id }}">

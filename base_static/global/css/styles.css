@@ -477,6 +477,14 @@ color: var(--color-debug-dark);
     border-bottom: 0.1rem solid var(--color-gray-3);
 }
 
+.published {
+    background-color: rgb(134, 244, 134);
+}
+
+.not-published {
+    background-color: rgb(253, 138, 138);
+}
+
 .authors-dashboard-container a {
     display: block;
     text-decoration: none;
@@ -508,10 +516,14 @@ color: var(--color-debug-dark);
     color: var(--color-primary-light);
 }
 
-.user-recipe-list-item p {
+.user-recipe-list-item .recipe-category {
     padding-right: 1rem;
     text-align: right;
-    width: 150px;
+    width: 100px;
+}
+
+.user-recipe-list-item .published-recipe {
+    text-align: left;
 }
 
 .user-recipe-list-item i {
@@ -637,7 +649,7 @@ color: var(--color-debug-dark);
         overflow: hidden;
     }
 
-    .user-recipe-list-item p {
+    .user-recipe-list-item .recipe-category {
         width: 70px;
     }
 
