@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.text import slugify
 from django.urls import reverse
 from recipes.models import Recipe
+from django.views import View
 
 from .forms import LoginForm, RegisterForm, AuthorsRecipeForm
 
@@ -107,33 +108,53 @@ def dashboard_view(request):
     })
 
 
-@login_required(login_url='authors:login', redirect_field_name='next')
-def recipe_edit(request, id):
-    recipe = get_object_or_404(Recipe, id=id)
+class RecipeEdit(View):
+    def get_recipe(self, id):
+        recipe = None
 
-    form = AuthorsRecipeForm(
-        request.POST or None,
-        files=request.FILES or None,
-        instance=recipe,
-    )
+        if id:
+            recipe = get_object_or_404(Recipe, id=id)
 
-    if form.is_valid():
-        recipe = form.save(commit=False)
-
-        recipe.author = request.user
-        recipe.preparation_steps_is_html = False
-        recipe.is_published = False
-
-        recipe.save()
-
-        messages.success(request, 'Sua receita foi editada com sucesso!')
-
-        return redirect(reverse('authors:dashboard'))
-
-    return render(request, 'author/pages/dashboard_edit_view.html', context={
-        'recipe': recipe,
+            if not recipe:
+                raise Http404
+            
+            return recipe
+    
+    def render_recipe(self, form):
+        return render(self.request, 'author/pages/dashboard_edit_view.html', context={
         'form': form,
     })
+
+    def get(self, request, id):
+        recipe = self.get_recipe(id)
+
+        form = AuthorsRecipeForm(instance=recipe)
+
+        return self.render_recipe(form)
+
+    def post(self, request, id):
+        recipe = self.get_recipe(id)
+
+        form = AuthorsRecipeForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=recipe
+        )
+
+        if form.is_valid():
+            recipe = form.save(commit=False)
+
+            recipe.author = request.user
+            recipe.preparation_steps_is_html = False
+            recipe.is_published = False
+
+            recipe.save()
+
+            messages.success(request, 'Sua receita foi editada com sucesso!')
+
+            return redirect(reverse('authors:dashboard'))
+
+    
 
 
 @login_required(login_url='authors:login', redirect_field_name='next')
@@ -162,7 +183,7 @@ def recipe_create(request):
         messages.error(request, 'Erro ao validar formulário!')
 
         return redirect(reverse('authors:recipe_create'))
-    
+
     return render(request, 'author/pages/dashboard_edit_view.html', context={
         'form': form,
     })
@@ -171,7 +192,7 @@ def recipe_create(request):
 def dashboard_recipe_delete(request):
     if not request.POST:
         raise Http404
- 
+
     POST = request.POST
     id = POST.get('id')
 
