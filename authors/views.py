@@ -154,39 +154,45 @@ class RecipeEdit(View):
 
             return redirect(reverse('authors:dashboard'))
 
+
+class RecipeCreate(View):
+    def get(self, request):
+        form = AuthorsRecipeForm()
+
+        return render(request, 'author/pages/dashboard_edit_view.html', context={
+            'form': form
+        })
     
+    def post(self, request):
+        form = AuthorsRecipeForm(
+            request.POST or None,
+            files=request.FILES or None,
+        )
 
+        try:
+            if form.is_valid():
+                recipe = form.save(commit=False)
 
-@login_required(login_url='authors:login', redirect_field_name='next')
-def recipe_create(request):
-    form = AuthorsRecipeForm(
-        request.POST or None,
-        files=request.FILES or None,
-    )
+                recipe.author = request.user
+                recipe.preparation_steps_is_html = False
+                recipe.is_published = False
+                recipe.slug = slugify(recipe.title, allow_unicode=True)
 
-    try:
-        if form.is_valid():
-            recipe = form.save(commit=False)
+                recipe.save()
 
-            recipe.author = request.user
-            recipe.preparation_steps_is_html = False
-            recipe.is_published = False
-            recipe.slug = slugify(recipe.title, allow_unicode=True)
+                messages.success(request, 'Sua receita foi criada com sucesso!')
 
-            recipe.save()
+                return redirect(reverse('authors:dashboard'))
 
-            messages.success(request, 'Sua receita foi criada com sucesso!')
+        except TypeError:
+            messages.error(request, 'Erro ao validar formulário!')
 
-            return redirect(reverse('authors:dashboard'))
+            return redirect(reverse('authors:recipe_create'))
+        
+        return render(request, 'author/pages/dashboard_edit_view.html', context={
+            'form': form,
+        })
 
-    except TypeError:
-        messages.error(request, 'Erro ao validar formulário!')
-
-        return redirect(reverse('authors:recipe_create'))
-
-    return render(request, 'author/pages/dashboard_edit_view.html', context={
-        'form': form,
-    })
 
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard_recipe_delete(request):
