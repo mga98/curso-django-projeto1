@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from django.urls import reverse
 from recipes.models import Recipe
@@ -108,6 +109,10 @@ def dashboard_view(request):
     })
 
 
+@method_decorator(
+    login_required(login_url='authors:login', redirect_field_name='next'),
+    name='dispatch'
+)
 class RecipeEdit(View):
     def get_recipe(self, id):
         recipe = None
@@ -117,9 +122,9 @@ class RecipeEdit(View):
 
             if not recipe:
                 raise Http404
-            
+
             return recipe
-    
+
     def render_recipe(self, form):
         return render(self.request, 'author/pages/dashboard_edit_view.html', context={
         'form': form,
@@ -155,6 +160,10 @@ class RecipeEdit(View):
             return redirect(reverse('authors:dashboard'))
 
 
+@method_decorator(
+    login_required(login_url='authors:login', redirect_field_name='next'),
+    name='dispatch'
+)
 class RecipeCreate(View):
     def get(self, request):
         form = AuthorsRecipeForm()
@@ -162,7 +171,7 @@ class RecipeCreate(View):
         return render(request, 'author/pages/dashboard_edit_view.html', context={
             'form': form
         })
-    
+
     def post(self, request):
         form = AuthorsRecipeForm(
             request.POST or None,
@@ -188,7 +197,7 @@ class RecipeCreate(View):
             messages.error(request, 'Erro ao validar formulário!')
 
             return redirect(reverse('authors:recipe_create'))
-        
+
         return render(request, 'author/pages/dashboard_edit_view.html', context={
             'form': form,
         })
@@ -206,5 +215,20 @@ def dashboard_recipe_delete(request):
 
     recipe.delete()
     messages.info(request, f'Receita ({recipe.title}) deletada com sucesso!')
+
+    return redirect(reverse('authors:dashboard'))
+
+
+def user_like_system(request, id):
+    if not request.POST:
+        raise Http404
+
+    POST = request.POST
+    id = POST.get('id')
+
+    recipe = get_object_or_404(Recipe, id=id)
+
+    recipe.delete()
+    messages.info(request, 'User deleted succesfully!')
 
     return redirect(reverse('authors:dashboard'))
