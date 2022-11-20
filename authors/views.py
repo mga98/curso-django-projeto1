@@ -203,32 +203,15 @@ class RecipeCreate(View):
         })
 
 
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_delete(request):
-    if not request.POST:
-        raise Http404
+@method_decorator(
+    login_required(login_url='authors:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class RecipeDelete(RecipeEdit):
+    def post(self, *args, **kwargs):
+        recipe = self.get_recipe(self.request.POST.get('id'))
+        recipe.delete()
 
-    POST = request.POST
-    id = POST.get('id')
+        messages.success(self.request, f'Receita ({recipe.title}) deletada com sucesso!')
 
-    recipe = get_object_or_404(Recipe, id=id)
-
-    recipe.delete()
-    messages.info(request, f'Receita ({recipe.title}) deletada com sucesso!')
-
-    return redirect(reverse('authors:dashboard'))
-
-
-def user_like_system(request, id):
-    if not request.POST:
-        raise Http404
-
-    POST = request.POST
-    id = POST.get('id')
-
-    recipe = get_object_or_404(Recipe, id=id)
-
-    recipe.delete()
-    messages.info(request, 'User deleted succesfully!')
-
-    return redirect(reverse('authors:dashboard'))
+        return redirect(reverse('authors:dashboard'))
