@@ -8,7 +8,7 @@ from unittest.mock import patch
 class RecipeHomeViewTest(RecipeTestBase):
     def test_recipe_home_view_function_is_correct(self):
         view = resolve(reverse('recipes:index'))
-        self.assertIs(view.func, views.RecipeHome)
+        self.assertIs(view.func.view_class, views.RecipeHome)
 
     def test_recipe_home_view_returns_status_code_200(self):
         response = self.client.get(reverse('recipes:index'))
