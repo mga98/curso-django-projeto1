@@ -2,7 +2,7 @@ from django.http import Http404
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.shortcuts import get_list_or_404, get_object_or_404, render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .models import Category, Recipe
 from utils.pagination import make_pagination
@@ -47,13 +47,27 @@ class RecipeHome(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
 
 
-def recipe(request, id):
-    recipe = get_object_or_404(Recipe, id=id, is_published=True)
+class RecipeDetail(DetailView):
+    model = Recipe
+    context_object_name = 'recipe'
+    template_name = 'recipes/pages/recipe.html'
 
-    return render(request, 'recipes/pages/recipe.html', context={
-            'recipe': recipe,
-            'is_detail_page': True
-        })
+    def get_object(self, *args, **kwargs):
+        obj = super().get_object(*args, **kwargs)
+        pk = self.kwargs.get('pk')
+        obj = get_object_or_404(Recipe, id=pk, is_published=True)
+
+        return obj
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx.update(
+            {
+                'is_detail_page': True,
+            }
+        )
+
+        return ctx
 
 
 class RecipeCategory(RecipeListViewBase):
@@ -97,7 +111,7 @@ class RecipeSearch(RecipeListViewBase):
         search_term = self.get_search_term()
         qs = qs.filter(
             Q(
-                Q(title__icontains=search_term) |
+                Q(title__icontains=search_term) |  # The pipe | is used like a "OR".
                 Q(description__icontains=search_term)
             ),
             is_published=True,
