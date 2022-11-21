@@ -81,25 +81,39 @@ class RecipeCategory(RecipeListViewBase):
         return ctx
 
 
-def search(request):
-    search_term = request.GET.get('q', '').strip()
+class RecipeSearch(RecipeListViewBase):
+    template_name = 'recipes/pages/search.html'
 
-    if not search_term:
-        raise Http404()
+    def get_search_term(self):
+        search_term = self.request.GET.get('q', '').strip()
 
-    recipes = Recipe.objects.filter(
-        Q(
-            Q(title__icontains=search_term) |  # The pipe | is used to put an "OR" between the filters instead of the "AND".
-            Q(description__icontains=search_term)
-        ),
-        is_published=True,
-    ).order_by('-id')
+        if not search_term:
+            raise Http404
 
-    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
+        return search_term
 
-    return render(request, 'recipes/pages/search.html', context={
-        'page_title': f'Search for "{search_term}"',
-        'recipes': page_obj,
-        'pagination_range': pagination_range,
-        'aditional_url_query': f'&q={search_term}'
-    })
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        search_term = self.get_search_term()
+        qs = qs.filter(
+            Q(
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term)
+            ),
+            is_published=True,
+        )
+
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        search_term = self.get_search_term()
+        ctx.update(
+            {
+                'page_title': f'Pesquisa por "{search_term}"',
+                'aditional_url_query': f'&q={search_term}',
+            }
+        )
+
+        return ctx
+
