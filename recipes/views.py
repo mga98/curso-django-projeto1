@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.shortcuts import get_list_or_404, get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from .models import Category, Recipe
