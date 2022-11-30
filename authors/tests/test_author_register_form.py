@@ -127,7 +127,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
-        msg = 'Você foi registrado com sucesso!'
+        msg = 'Seja bem vindo'
         self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_author_created_can_login(self):

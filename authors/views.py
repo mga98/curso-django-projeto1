@@ -35,12 +35,21 @@ def register_create(request):
         user = form.save(commit=False)
         user.set_password(user.password)
         user.save()
-        messages.success(
-            request, 'Você foi registrado com sucesso! Faça seu login.')
 
-        del(request.session['register_form_data'])
+        authenticated_user = authenticate(
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password']
+        )
 
-        return redirect(reverse('authors:login'))
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+
+            messages.success(
+                request, f'Seja bem vindo {form.cleaned_data["first_name"]}!')
+
+            del(request.session['register_form_data'])
+
+            return redirect(reverse('authors:dashboard'))
 
     return redirect('authors:register')
 

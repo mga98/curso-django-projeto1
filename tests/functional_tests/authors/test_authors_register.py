@@ -114,6 +114,6 @@ class AuthorsRegisterTest(AuthorBaseFunctionalTest):
 
             body = self.browser.find_element(By.TAG_NAME, 'body')
 
-            self.assertIn('Você foi registrado com sucesso! Faça seu login.', body.text)
+            self.assertIn('Seja bem vindo', body.text)
         
         self.form_field_test_with_callback(callback, email='', input_key='Test12@email.com')
